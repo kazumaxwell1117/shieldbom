@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "SBOM vulnerability scanner and license checker for embedded/IoT software"
 license = "Apache-2.0"
-repository = "https://github.com/kazuma/shieldbom"
+repository = "https://github.com/kazumaxwell1117/shieldbom"
 keywords = ["sbom", "spdx", "cyclonedx", "vulnerability", "embedded"]
 categories = ["command-line-utilities", "development-tools"]
 
