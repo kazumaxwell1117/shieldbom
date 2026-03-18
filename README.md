@@ -8,6 +8,9 @@
 
 ---
 
+<!-- TODO: Add asciinema demo here after recording -->
+<!-- [![asciicast](https://asciinema.org/a/XXXXX.svg)](https://asciinema.org/a/XXXXX) -->
+
 ShieldBOM parses SBOM files (SPDX, CycloneDX), matches components against known vulnerabilities, and detects license conflicts -- all from a single binary that works offline. Built for embedded and IoT teams who deal with C/C++ supply chains, cross-compiled dependencies, and air-gapped build environments.
 
 ## Features
@@ -50,8 +53,8 @@ cargo build --release
 # Download the vulnerability database
 shieldbom db update
 
-# Scan an SBOM file
-shieldbom scan firmware-sbom.cdx.json
+# Scan an SBOM file (try the included example!)
+shieldbom scan examples/smart-gateway-firmware.spdx.json
 ```
 
 ## Usage
