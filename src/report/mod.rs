@@ -208,7 +208,7 @@ impl SarifReport {
                     driver: SarifDriver {
                         name: "ShieldBOM".to_string(),
                         version: env!("CARGO_PKG_VERSION").to_string(),
-                        information_uri: "https://github.com/kazuma/shieldbom".to_string(),
+                        information_uri: "https://github.com/kazumaxwell1117/shieldbom".to_string(),
                         rules,
                     },
                 },

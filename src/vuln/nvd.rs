@@ -17,8 +17,10 @@ const DELAY_WITH_KEY: Duration = Duration::from_millis(650);     // ~46 req/30s
 
 #[derive(Debug, Deserialize)]
 struct NvdResponse {
+    #[allow(dead_code)]
     #[serde(default, rename = "resultsPerPage")]
     results_per_page: u32,
+    #[allow(dead_code)]
     #[serde(default, rename = "totalResults")]
     total_results: u32,
     #[serde(default)]
@@ -63,6 +65,7 @@ struct NvdCvssV30 {
 struct CvssData {
     #[serde(rename = "baseScore")]
     base_score: f64,
+    #[allow(dead_code)]
     #[serde(rename = "baseSeverity")]
     base_severity: Option<String>,
 }

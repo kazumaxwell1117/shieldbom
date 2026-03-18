@@ -34,8 +34,5 @@ pub async fn match_vulnerabilities(
 
 /// Match vulnerabilities using only the local database (offline mode)
 pub async fn match_offline(components: &[Component]) -> Result<Vec<VulnMatch>> {
-    // TODO: Implement SQLite-based offline matching
-    tracing::warn!("Offline mode: local DB matching not yet implemented, returning empty results");
-    let _ = components;
-    Ok(Vec::new())
+    crate::db::lookup_offline(components)
 }

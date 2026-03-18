@@ -2,9 +2,9 @@
 
 **SBOM vulnerability scanner and license checker for embedded/IoT software.**
 
-[![CI](https://github.com/kazuma/shieldbom/actions/workflows/ci.yml/badge.svg)](https://github.com/kazuma/shieldbom/actions)
+[![CI](https://github.com/kazumaxwell1117/shieldbom/actions/workflows/ci.yml/badge.svg)](https://github.com/kazumaxwell1117/shieldbom/actions)
 [![Crates.io](https://img.shields.io/crates/v/shieldbom.svg)](https://crates.io/crates/shieldbom)
-[![License](https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT-blue.svg)](#license)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 ---
 
@@ -38,7 +38,7 @@ cargo install shieldbom
 Or build from source:
 
 ```bash
-git clone https://github.com/kazuma/shieldbom.git
+git clone https://github.com/kazumaxwell1117/shieldbom.git
 cd shieldbom
 cargo build --release
 # Binary is at ./target/release/shieldbom
@@ -140,7 +140,6 @@ The EU CRA, enforceable by 2027, mandates SBOM submission for all software produ
 
 ### Current limitations (Phase 1)
 
-- Vulnerability matching uses OSV.dev API (offline DB snapshots coming soon)
 - No binary/firmware SBOM generation yet (Phase 3)
 - License conflict rules are a built-in set; custom policies are not yet supported
 - No web UI or team features (Phase 2)
@@ -150,7 +149,7 @@ The EU CRA, enforceable by 2027, mandates SBOM submission for all software produ
 Contributions are welcome. Here is how to get started:
 
 ```bash
-git clone https://github.com/kazuma/shieldbom.git
+git clone https://github.com/kazumaxwell1117/shieldbom.git
 cd shieldbom
 cargo build
 cargo test
@@ -166,13 +165,8 @@ If you are unsure whether a change fits the project direction, open an issue fir
 
 ## License
 
-Licensed under either of:
-
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
-- MIT License ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
-
-at your option.
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
 
 ### Contribution
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this project by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this project by you, as defined in the Apache-2.0 license, shall be licensed under the same terms, without any additional terms or conditions.

@@ -7,6 +7,7 @@ use crate::models::{Component, Hash, ParsedSbom, SourceFormat};
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct CdxDocument {
+    #[allow(dead_code)]
     bom_format: Option<String>,
     spec_version: Option<String>,
     #[serde(default)]

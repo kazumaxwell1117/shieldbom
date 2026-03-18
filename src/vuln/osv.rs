@@ -48,6 +48,7 @@ struct OsvAffected {
 
 #[derive(Debug, Deserialize)]
 struct OsvRange {
+    #[allow(dead_code)]
     #[serde(rename = "type")]
     range_type: Option<String>,
     #[serde(default)]
@@ -56,6 +57,7 @@ struct OsvRange {
 
 #[derive(Debug, Deserialize)]
 struct OsvEvent {
+    #[allow(dead_code)]
     introduced: Option<String>,
     fixed: Option<String>,
 }

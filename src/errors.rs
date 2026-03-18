@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 #[derive(Error, Debug)]
+#[allow(dead_code)]
 pub enum ShieldBomError {
     #[error("Unsupported SBOM format: {0}")]
     UnsupportedFormat(String),

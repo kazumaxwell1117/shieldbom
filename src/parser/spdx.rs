@@ -7,6 +7,7 @@ use crate::models::{Component, Hash, ParsedSbom, SourceFormat};
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct SpdxDocument {
+    #[allow(dead_code)]
     spdx_version: Option<String>,
     #[serde(default)]
     packages: Vec<SpdxPackage>,
@@ -34,6 +35,7 @@ struct SpdxPackage {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct SpdxExternalRef {
+    #[allow(dead_code)]
     reference_category: Option<String>,
     reference_type: Option<String>,
     reference_locator: Option<String>,

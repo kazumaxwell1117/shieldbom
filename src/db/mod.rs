@@ -101,6 +101,7 @@ struct OsvSeverity {
 struct OsvAffected {
     #[serde(default, rename = "package")]
     pkg: Option<OsvAffectedPackage>,
+    #[allow(dead_code)]
     #[serde(default)]
     ranges: Vec<OsvRange>,
     #[serde(default)]
@@ -110,11 +111,13 @@ struct OsvAffected {
 #[derive(Debug, serde::Deserialize)]
 struct OsvAffectedPackage {
     name: Option<String>,
+    #[allow(dead_code)]
     ecosystem: Option<String>,
     purl: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize)]
+#[allow(dead_code)]
 struct OsvRange {
     #[serde(rename = "type")]
     _range_type: Option<String>,
@@ -122,6 +125,7 @@ struct OsvRange {
     events: Vec<OsvEvent>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, serde::Deserialize)]
 struct OsvEvent {
     introduced: Option<String>,
