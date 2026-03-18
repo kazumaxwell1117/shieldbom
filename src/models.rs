@@ -222,9 +222,18 @@ impl AnalysisStats {
             total_components: components.len(),
             components_with_vulns: components_with_vulns.len(),
             total_vulns: vulns.len(),
-            critical: vulns.iter().filter(|v| v.severity == Severity::Critical).count(),
-            high: vulns.iter().filter(|v| v.severity == Severity::High).count(),
-            medium: vulns.iter().filter(|v| v.severity == Severity::Medium).count(),
+            critical: vulns
+                .iter()
+                .filter(|v| v.severity == Severity::Critical)
+                .count(),
+            high: vulns
+                .iter()
+                .filter(|v| v.severity == Severity::High)
+                .count(),
+            medium: vulns
+                .iter()
+                .filter(|v| v.severity == Severity::Medium)
+                .count(),
             low: vulns.iter().filter(|v| v.severity == Severity::Low).count(),
             license_issues: license_issues.len(),
         }

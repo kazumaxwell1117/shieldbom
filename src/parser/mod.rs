@@ -1,5 +1,5 @@
-mod spdx;
 mod cyclonedx;
+mod spdx;
 
 use std::path::Path;
 
@@ -29,10 +29,7 @@ pub fn parse_sbom(path: &Path) -> Result<ParsedSbom> {
 }
 
 fn detect_format(path: &Path, content: &str) -> Result<SourceFormat> {
-    let filename = path
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("");
+    let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
 
     // Try by file extension first
     if filename.ends_with(".spdx.json") {
@@ -69,17 +66,18 @@ fn detect_format(path: &Path, content: &str) -> Result<SourceFormat> {
         return Ok(detect_cdx_xml_version(content));
     }
 
-    Err(ShieldBomError::UnsupportedFormat(
-        format!("Could not detect format for: {}", path.display()),
-    )
+    Err(ShieldBomError::UnsupportedFormat(format!(
+        "Could not detect format for: {}",
+        path.display()
+    ))
     .into())
 }
 
 fn detect_cdx_json_version(content: &str) -> SourceFormat {
-    if content.contains("\"specVersion\"") {
-        if content.contains("\"1.5\"") || content.contains("\"1.6\"") {
-            return SourceFormat::CycloneDx15Json;
-        }
+    if content.contains("\"specVersion\"")
+        && (content.contains("\"1.5\"") || content.contains("\"1.6\""))
+    {
+        return SourceFormat::CycloneDx15Json;
     }
     SourceFormat::CycloneDx14Json
 }

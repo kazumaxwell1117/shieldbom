@@ -24,9 +24,7 @@ pub async fn match_vulnerabilities(
     }
 
     // Deduplicate by CVE ID + component
-    all_vulns.sort_by(|a, b| {
-        (&a.component_name, &a.cve_id).cmp(&(&b.component_name, &b.cve_id))
-    });
+    all_vulns.sort_by(|a, b| (&a.component_name, &a.cve_id).cmp(&(&b.component_name, &b.cve_id)));
     all_vulns.dedup_by(|a, b| a.component_name == b.component_name && a.cve_id == b.cve_id);
 
     Ok(all_vulns)

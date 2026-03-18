@@ -65,7 +65,11 @@ pub fn parse_json(content: &str) -> Result<ParsedSbom> {
         _ => SourceFormat::CycloneDx14Json,
     };
 
-    let components = doc.components.into_iter().map(|c| convert_cdx_component(c, format)).collect();
+    let components = doc
+        .components
+        .into_iter()
+        .map(|c| convert_cdx_component(c, format))
+        .collect();
 
     Ok(ParsedSbom {
         format_detected: format,

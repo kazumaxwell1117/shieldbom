@@ -11,7 +11,7 @@ const NVD_API_URL: &str = "https://services.nvd.nist.gov/rest/json/cves/2.0";
 /// Rate limit: 5 req/30s without key, 50 req/30s with key.
 /// We use a conservative per-request delay to stay within limits.
 const DELAY_WITHOUT_KEY: Duration = Duration::from_millis(6500); // ~4.6 req/30s
-const DELAY_WITH_KEY: Duration = Duration::from_millis(650);     // ~46 req/30s
+const DELAY_WITH_KEY: Duration = Duration::from_millis(650); // ~46 req/30s
 
 // -- NVD API 2.0 response structures --
 

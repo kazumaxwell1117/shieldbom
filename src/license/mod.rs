@@ -124,7 +124,10 @@ mod tests {
         let components = vec![make_component("libfoo", vec!["GPL-3.0-only"])];
         let issues = check(&components);
         assert_eq!(issues.len(), 1);
-        assert!(matches!(issues[0].issue_type, LicenseIssueType::CopyleftDetected));
+        assert!(matches!(
+            issues[0].issue_type,
+            LicenseIssueType::CopyleftDetected
+        ));
     }
 
     #[test]
@@ -132,7 +135,10 @@ mod tests {
         let components = vec![make_component("libbar", vec![])];
         let issues = check(&components);
         assert_eq!(issues.len(), 1);
-        assert!(matches!(issues[0].issue_type, LicenseIssueType::MissingLicense));
+        assert!(matches!(
+            issues[0].issue_type,
+            LicenseIssueType::MissingLicense
+        ));
     }
 
     #[test]
@@ -147,6 +153,9 @@ mod tests {
         let components = vec![make_component("libweird", vec!["CustomLicense-1.0"])];
         let issues = check(&components);
         assert_eq!(issues.len(), 1);
-        assert!(matches!(issues[0].issue_type, LicenseIssueType::UnknownLicense));
+        assert!(matches!(
+            issues[0].issue_type,
+            LicenseIssueType::UnknownLicense
+        ));
     }
 }

@@ -77,9 +77,7 @@ pub async fn query_batch(components: &[Component]) -> Result<Vec<VulnMatch>> {
         }
 
         let query = OsvQuery {
-            package: OsvPackage {
-                purl: purl.clone(),
-            },
+            package: OsvPackage { purl: purl.clone() },
             version: component.version.clone(),
         };
 
@@ -100,7 +98,11 @@ pub async fn query_batch(components: &[Component]) -> Result<Vec<VulnMatch>> {
                 );
             }
             Err(e) => {
-                tracing::warn!("OSV API error for {}@{}: {e}", component.name, component.version);
+                tracing::warn!(
+                    "OSV API error for {}@{}: {e}",
+                    component.name,
+                    component.version
+                );
             }
         }
     }

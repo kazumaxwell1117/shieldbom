@@ -201,7 +201,11 @@ impl TagValueBuilder {
 
 fn extract_licenses(pkg: &SpdxPackage) -> Vec<String> {
     let mut licenses = Vec::new();
-    for lic in [&pkg.license_concluded, &pkg.license_declared].iter().copied().flatten() {
+    for lic in [&pkg.license_concluded, &pkg.license_declared]
+        .iter()
+        .copied()
+        .flatten()
+    {
         if lic != "NOASSERTION" && lic != "NONE" {
             licenses.push(lic.clone());
         }

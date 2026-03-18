@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use rusqlite::{params, Connection};
@@ -42,7 +42,10 @@ const SEED_PACKAGES: &[(&str, &str)] = &[
     ("pkg:npm/lodash", "npm"),
     ("pkg:npm/axios", "npm"),
     ("pkg:maven/org.apache.logging.log4j/log4j-core", "Maven"),
-    ("pkg:maven/com.fasterxml.jackson.core/jackson-databind", "Maven"),
+    (
+        "pkg:maven/com.fasterxml.jackson.core/jackson-databind",
+        "Maven",
+    ),
     ("pkg:golang/golang.org/x/crypto", "Go"),
     ("pkg:golang/golang.org/x/net", "Go"),
 ];
@@ -149,7 +152,7 @@ fn dirs_or_home() -> Result<PathBuf> {
 }
 
 /// Ensure the DB directory exists
-fn ensure_db_dir(db_path: &PathBuf) -> Result<()> {
+fn ensure_db_dir(db_path: &Path) -> Result<()> {
     if let Some(parent) = db_path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed to create DB directory: {}", parent.display()))?;
@@ -221,7 +224,10 @@ pub async fn update() -> Result<()> {
 
     // Strategy: query OSV for each seed package to populate the DB
     for (purl, ecosystem) in SEED_PACKAGES {
-        eprint!("  Fetching vulnerabilities for {} ({})... ", purl, ecosystem);
+        eprint!(
+            "  Fetching vulnerabilities for {} ({})... ",
+            purl, ecosystem
+        );
 
         let query = OsvEcosystemQuery {
             package: Some(OsvPackageQuery {
@@ -232,21 +238,19 @@ pub async fn update() -> Result<()> {
         };
 
         match client.post(OSV_QUERY_URL).json(&query).send().await {
-            Ok(resp) if resp.status().is_success() => {
-                match resp.json::<OsvResponse>().await {
-                    Ok(osv_resp) => {
-                        let count = osv_resp.vulns.len();
-                        for vuln in &osv_resp.vulns {
-                            insert_vuln(&conn, vuln)?;
-                        }
-                        total_inserted += count;
-                        eprintln!("{} vulnerabilities", count);
+            Ok(resp) if resp.status().is_success() => match resp.json::<OsvResponse>().await {
+                Ok(osv_resp) => {
+                    let count = osv_resp.vulns.len();
+                    for vuln in &osv_resp.vulns {
+                        insert_vuln(&conn, vuln)?;
                     }
-                    Err(e) => {
-                        eprintln!("parse error: {e}");
-                    }
+                    total_inserted += count;
+                    eprintln!("{} vulnerabilities", count);
                 }
-            }
+                Err(e) => {
+                    eprintln!("parse error: {e}");
+                }
+            },
             Ok(resp) => {
                 eprintln!("HTTP {}", resp.status());
             }
@@ -269,21 +273,19 @@ pub async fn update() -> Result<()> {
         };
 
         match client.post(OSV_QUERY_URL).json(&query).send().await {
-            Ok(resp) if resp.status().is_success() => {
-                match resp.json::<OsvResponse>().await {
-                    Ok(osv_resp) => {
-                        let count = osv_resp.vulns.len();
-                        for vuln in &osv_resp.vulns {
-                            insert_vuln(&conn, vuln)?;
-                        }
-                        total_inserted += count;
-                        eprintln!("{} vulnerabilities", count);
+            Ok(resp) if resp.status().is_success() => match resp.json::<OsvResponse>().await {
+                Ok(osv_resp) => {
+                    let count = osv_resp.vulns.len();
+                    for vuln in &osv_resp.vulns {
+                        insert_vuln(&conn, vuln)?;
                     }
-                    Err(_) => {
-                        eprintln!("skipped (response too large or parse error)");
-                    }
+                    total_inserted += count;
+                    eprintln!("{} vulnerabilities", count);
                 }
-            }
+                Err(_) => {
+                    eprintln!("skipped (response too large or parse error)");
+                }
+            },
             Ok(resp) => {
                 eprintln!("HTTP {}", resp.status());
             }
@@ -511,7 +513,10 @@ pub fn lookup_offline(components: &[Component]) -> Result<Vec<VulnMatch>> {
 }
 
 /// Look up vulnerabilities using a specific DB path (useful for testing / custom DB location)
-pub fn lookup_offline_with_path(components: &[Component], db_path: &PathBuf) -> Result<Vec<VulnMatch>> {
+pub fn lookup_offline_with_path(
+    components: &[Component],
+    db_path: &PathBuf,
+) -> Result<Vec<VulnMatch>> {
     if !db_path.exists() {
         return Err(ShieldBomError::DatabaseError(format!(
             "Local vulnerability database not found at {}. Run 'shieldbom db update' first.",
@@ -555,11 +560,9 @@ pub fn lookup_offline_with_path(components: &[Component], db_path: &PathBuf) -> 
                 })
                 .map_err(|e| ShieldBomError::DatabaseError(format!("Query failed: {e}")))?;
 
-            for row in rows {
-                if let Ok(vr) = row {
-                    if is_version_affected(&component.version, &vr.affected_versions) {
-                        matches.push(vuln_row_to_match(&vr, component));
-                    }
+            for vr in rows.flatten() {
+                if is_version_affected(&component.version, &vr.affected_versions) {
+                    matches.push(vuln_row_to_match(&vr, component));
                 }
             }
         }
@@ -591,11 +594,9 @@ pub fn lookup_offline_with_path(components: &[Component], db_path: &PathBuf) -> 
                 })
                 .map_err(|e| ShieldBomError::DatabaseError(format!("Query failed: {e}")))?;
 
-            for row in rows {
-                if let Ok(vr) = row {
-                    if is_version_affected(&component.version, &vr.affected_versions) {
-                        matches.push(vuln_row_to_match(&vr, component));
-                    }
+            for vr in rows.flatten() {
+                if is_version_affected(&component.version, &vr.affected_versions) {
+                    matches.push(vuln_row_to_match(&vr, component));
                 }
             }
         }
@@ -604,9 +605,7 @@ pub fn lookup_offline_with_path(components: &[Component], db_path: &PathBuf) -> 
     }
 
     // Deduplicate
-    results.sort_by(|a, b| {
-        (&a.component_name, &a.cve_id).cmp(&(&b.component_name, &b.cve_id))
-    });
+    results.sort_by(|a, b| (&a.component_name, &a.cve_id).cmp(&(&b.component_name, &b.cve_id)));
     results.dedup_by(|a, b| a.component_name == b.component_name && a.cve_id == b.cve_id);
 
     Ok(results)
@@ -699,9 +698,15 @@ mod tests {
 
     #[test]
     fn test_strip_purl_version() {
-        assert_eq!(strip_purl_version("pkg:cargo/serde@1.0.0"), "pkg:cargo/serde");
+        assert_eq!(
+            strip_purl_version("pkg:cargo/serde@1.0.0"),
+            "pkg:cargo/serde"
+        );
         assert_eq!(strip_purl_version("pkg:cargo/serde"), "pkg:cargo/serde");
-        assert_eq!(strip_purl_version("pkg:npm/@scope/pkg@2.0"), "pkg:npm/@scope/pkg");
+        assert_eq!(
+            strip_purl_version("pkg:npm/@scope/pkg@2.0"),
+            "pkg:npm/@scope/pkg"
+        );
     }
 
     #[test]

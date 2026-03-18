@@ -1,11 +1,11 @@
 mod cli;
-mod models;
-mod parser;
-mod vuln;
-mod license;
-mod report;
 mod db;
 mod errors;
+mod license;
+mod models;
+mod parser;
+mod report;
+mod vuln;
 
 use anyhow::Result;
 use clap::Parser;
@@ -33,13 +33,13 @@ async fn main() -> Result<()> {
 }
 
 mod commands {
-    use anyhow::Result;
-    use crate::cli::{ScanArgs, ValidateArgs, DbArgs, DbCommands};
-    use crate::parser;
-    use crate::vuln;
+    use crate::cli::{DbArgs, DbCommands, ScanArgs, ValidateArgs};
     use crate::license;
+    use crate::parser;
     use crate::report;
     use crate::report::OutputFormat;
+    use crate::vuln;
+    use anyhow::Result;
 
     pub async fn scan(args: ScanArgs) -> Result<()> {
         let sbom = parser::parse_sbom(&args.file)?;
@@ -83,7 +83,11 @@ mod commands {
     pub fn validate(args: ValidateArgs) -> Result<()> {
         match parser::parse_sbom(&args.file) {
             Ok(sbom) => {
-                println!("Valid {} with {} components", sbom.format_detected, sbom.components.len());
+                println!(
+                    "Valid {} with {} components",
+                    sbom.format_detected,
+                    sbom.components.len()
+                );
                 Ok(())
             }
             Err(e) => {
