@@ -8,8 +8,7 @@
 
 ---
 
-<!-- TODO: Add asciinema demo here after recording -->
-<!-- [![asciicast](https://asciinema.org/a/XXXXX.svg)](https://asciinema.org/a/XXXXX) -->
+[![asciicast](https://asciinema.org/a/N13CAeeH05f2BVX1.svg)](https://asciinema.org/a/N13CAeeH05f2BVX1)
 
 ShieldBOM parses SBOM files (SPDX, CycloneDX), matches components against known vulnerabilities, and detects license conflicts -- all from a single binary that works offline. Built for embedded and IoT teams who deal with C/C++ supply chains, cross-compiled dependencies, and air-gapped build environments.
 
