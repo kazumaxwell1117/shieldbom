@@ -59,6 +59,24 @@ git clone https://github.com/kazumaxwell1117/shieldbom.git
 shieldbom scan shieldbom/examples/smart-gateway-firmware.spdx.json
 ```
 
+Example output (scanning a sample IoT gateway firmware SBOM):
+
+```
+$ shieldbom scan examples/smart-gateway-firmware.spdx.json
+
+ShieldBOM Scan Results
+File: examples/smart-gateway-firmware.spdx.json
+Format: SPDX 2.3 (JSON)
+Components: 9
+
+  0 Critical  0 High  0 Medium  0 Low
+
+License Issues
+--------------------------------------------------------------------------------
+  [Copyleft] busybox @ 1.36.0 - Copyleft license 'GPL-2.0-only' detected
+             - may conflict with proprietary distribution
+```
+
 By default, ShieldBOM queries [OSV.dev](https://osv.dev/) for vulnerabilities. For offline/air-gapped environments:
 
 ```bash
