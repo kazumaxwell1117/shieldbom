@@ -51,11 +51,19 @@ cargo build --release
 ### First scan
 
 ```bash
-# Download the vulnerability database
-shieldbom db update
+# Scan any SPDX or CycloneDX file you already have
+shieldbom scan your-product.spdx.json
 
-# Scan an SBOM file (try the included example!)
-shieldbom scan examples/smart-gateway-firmware.spdx.json
+# Or try the included examples (if you cloned the repo)
+git clone https://github.com/kazumaxwell1117/shieldbom.git
+shieldbom scan shieldbom/examples/smart-gateway-firmware.spdx.json
+```
+
+By default, ShieldBOM queries [OSV.dev](https://osv.dev/) for vulnerabilities. For offline/air-gapped environments:
+
+```bash
+shieldbom db update           # Download vulnerability DB (once)
+shieldbom scan --offline product.spdx.json
 ```
 
 ## Usage
@@ -131,13 +139,13 @@ ShieldBOM is built for this reality:
 
 ### EU Cyber Resilience Act (CRA)
 
-The EU CRA, enforceable by 2027, mandates SBOM submission for all software products sold in the EU market. ShieldBOM helps you get ahead of this requirement today. CRA-specific compliance reports are planned for Phase 3.
+The [EU Cyber Resilience Act (Regulation 2024/2847)](https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng), enforceable by December 2027, requires manufacturers to identify and document vulnerabilities and components of products with digital elements, including by drawing up an SBOM (Annex I, Part II). ShieldBOM helps you get ahead of this requirement today. CRA-specific compliance reports are planned for Phase 3.
 
 ## Roadmap
 
 | Phase | Focus | Status |
 |-------|-------|--------|
-| **Phase 1** | OSS CLI: SBOM parsing, vulnerability matching, license checks | In progress |
+| **Phase 1** | OSS CLI: SBOM parsing, vulnerability matching, license checks | **v0.1.0 released** |
 | **Phase 2** | SaaS dashboard, CI/CD integration (GitHub Actions, GitLab CI) | Planned |
 | **Phase 3** | Embedded specialization: binary SBOM, RTOS support, EU CRA reports | Planned |
 | **Phase 4** | Platform: fuzzing integration, SARIF aggregation | Planned |

@@ -40,6 +40,10 @@ pub fn check(components: &[Component]) -> Vec<LicenseIssue> {
         }
 
         for license in &component.licenses {
+            // SPDX LicenseRef-* identifiers are valid custom licenses
+            if license.starts_with("LicenseRef-") {
+                continue;
+            }
             if is_copyleft(license) {
                 issues.push(LicenseIssue {
                     component_name: component.name.clone(),
@@ -88,6 +92,13 @@ fn is_known_license(license: &str) -> bool {
         "BSL-1.0",
         "0BSD",
         "BlueOak-1.0.0",
+        "EPL-1.0",
+        "EPL-2.0",
+        "WTFPL",
+        "CC-BY-4.0",
+        "CC-BY-SA-4.0",
+        "PostgreSQL",
+        "Artistic-2.0",
     ];
 
     // Check permissive

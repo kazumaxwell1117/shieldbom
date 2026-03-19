@@ -132,8 +132,9 @@ pub fn parse_tag_value(content: &str) -> Result<ParsedSbom> {
                 }
                 "PackageLicenseConcluded" | "PackageLicenseDeclared" => {
                     if let Some(ref mut b) = current {
-                        if value != "NOASSERTION" && value != "NONE" {
-                            b.licenses.push(value.to_string());
+                        let v = value.to_string();
+                        if value != "NOASSERTION" && value != "NONE" && !b.licenses.contains(&v) {
+                            b.licenses.push(v);
                         }
                     }
                 }
@@ -206,7 +207,7 @@ fn extract_licenses(pkg: &SpdxPackage) -> Vec<String> {
         .copied()
         .flatten()
     {
-        if lic != "NOASSERTION" && lic != "NONE" {
+        if lic != "NOASSERTION" && lic != "NONE" && !licenses.contains(lic) {
             licenses.push(lic.clone());
         }
     }

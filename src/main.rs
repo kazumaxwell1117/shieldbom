@@ -42,13 +42,26 @@ mod commands {
     use anyhow::Result;
 
     pub async fn scan(args: ScanArgs) -> Result<()> {
-        let sbom = parser::parse_sbom(&args.file)?;
+        let sbom = match parser::parse_sbom(&args.file) {
+            Ok(sbom) => sbom,
+            Err(e) => {
+                eprintln!("Error: {e:#}");
+                std::process::exit(2);
+            }
+        };
         eprintln!(
             "Parsed {} components from {:?} ({})",
             sbom.components.len(),
             args.file,
             sbom.format_detected
         );
+
+        if sbom.components.is_empty() {
+            eprintln!(
+                "Warning: No components found in SBOM file. The file may be malformed or empty."
+            );
+            std::process::exit(2);
+        }
 
         let vulns = if args.offline {
             vuln::match_offline(&sbom.components).await?
