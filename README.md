@@ -139,15 +139,15 @@ shieldbom db info
 
 ## Why ShieldBOM?
 
-Existing SCA tools (Black Duck, FOSSA, Snyk) are built for web applications and container ecosystems. If you work with embedded software, you already know the gaps:
+Existing SCA tools (FOSSA, Snyk, and enterprise platforms) are built for web applications and container ecosystems. If you work with embedded software, you already know the gaps:
 
 - **C/C++ supply chains are invisible.** Package managers like Conan and vcpkg have limited SBOM support. Vendor-provided binaries ship with no metadata. These tools assume npm/pip/Maven dependency trees exist.
 - **Air-gapped environments are common.** Factory build servers, automotive CI systems, and classified environments cannot phone home to a cloud API on every build.
-- **$100K+/year licensing is not an option.** Black Duck is the only tool with real embedded coverage, but its pricing excludes small-to-mid-size teams. ShieldBOM's core functionality is free and open source.
+- **$100K+/year licensing is not an option.** Enterprise SCA platforms with real embedded coverage price out small-to-mid-size teams. ShieldBOM's core functionality is free and open source.
 
 ShieldBOM is built for this reality:
 
-| | ShieldBOM (OSS) | Black Duck | FOSSA / Snyk |
+| | ShieldBOM (OSS) | Enterprise SCA | FOSSA / Snyk |
 |---|---|---|---|
 | SPDX + CycloneDX parsing | Yes | Yes | Partial |
 | Offline operation | Yes | Limited | No |
