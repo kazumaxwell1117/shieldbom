@@ -1,4 +1,5 @@
 use axum::extract::{Path, Query, State};
+use axum::Extension;
 use axum::Json;
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
@@ -6,6 +7,7 @@ use uuid::Uuid;
 
 use shieldbom_core::models::AnalysisReport;
 
+use super::AccountId;
 use crate::errors::ApiError;
 use crate::AppState;
 
@@ -39,6 +41,7 @@ pub struct ListParams {
 
 pub async fn create(
     State(state): State<AppState>,
+    Extension(account): Extension<AccountId>,
     Json(report): Json<AnalysisReport>,
 ) -> Result<Json<ScanResponse>, ApiError> {
     let id = Uuid::new_v4().to_string();
@@ -49,11 +52,12 @@ pub async fn create(
 
     let db = state.db.lock().unwrap();
     db.execute(
-        "INSERT INTO scans (id, sbom_filename, format_detected, total_components, total_vulns,
+        "INSERT INTO scans (id, account_id, sbom_filename, format_detected, total_components, total_vulns,
          critical_count, high_count, medium_count, low_count, license_issues, report_json, created_at)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)",
         rusqlite::params![
             id,
+            account.0,
             filename,
             format,
             report.stats.total_components as i64,
@@ -85,16 +89,17 @@ pub async fn create(
 
 pub async fn get_by_id(
     State(state): State<AppState>,
+    Extension(account): Extension<AccountId>,
     Path(id): Path<String>,
 ) -> Result<Json<ScanDetailResponse>, ApiError> {
     let db = state.db.lock().unwrap();
     let mut stmt = db.prepare(
         "SELECT id, sbom_filename, format_detected, total_components, total_vulns,
          critical_count, high_count, medium_count, low_count, license_issues, report_json, created_at
-         FROM scans WHERE id = ?1",
+         FROM scans WHERE id = ?1 AND account_id = ?2",
     )?;
 
-    let result = stmt.query_row(rusqlite::params![id], |row| {
+    let result = stmt.query_row(rusqlite::params![id, account.0], |row| {
         let report_json: String = row.get(10)?;
         Ok((
             ScanResponse {
@@ -129,6 +134,7 @@ pub async fn get_by_id(
 
 pub async fn list(
     State(state): State<AppState>,
+    Extension(account): Extension<AccountId>,
     Query(params): Query<ListParams>,
 ) -> Result<Json<Vec<ScanResponse>>, ApiError> {
     let limit = params.limit.unwrap_or(20).min(100);
@@ -138,11 +144,11 @@ pub async fn list(
     let mut stmt = db.prepare(
         "SELECT id, sbom_filename, format_detected, total_components, total_vulns,
          critical_count, high_count, medium_count, low_count, license_issues, created_at
-         FROM scans ORDER BY created_at DESC LIMIT ?1 OFFSET ?2",
+         FROM scans WHERE account_id = ?1 ORDER BY created_at DESC LIMIT ?2 OFFSET ?3",
     )?;
 
     let rows = stmt
-        .query_map(rusqlite::params![limit, offset], |row| {
+        .query_map(rusqlite::params![account.0, limit, offset], |row| {
             Ok(ScanResponse {
                 id: row.get(0)?,
                 sbom_filename: row.get(1)?,

@@ -25,7 +25,7 @@ async fn main() -> anyhow::Result<()> {
         db: std::sync::Arc::new(Mutex::new(conn)),
     };
 
-    let app = routes::router().with_state(state);
+    let app = routes::router(state);
 
     let addr = "0.0.0.0:3000";
     tracing::info!("ShieldBOM server listening on {addr}");
