@@ -116,8 +116,8 @@ pub async fn get_by_id(
 
     match result {
         Ok((scan, report_json)) => {
-            let report: AnalysisReport =
-                serde_json::from_str(&report_json).map_err(|e| ApiError::Internal(e.to_string()))?;
+            let report: AnalysisReport = serde_json::from_str(&report_json)
+                .map_err(|e| ApiError::Internal(e.to_string()))?;
             Ok(Json(ScanDetailResponse { scan, report }))
         }
         Err(rusqlite::Error::QueryReturnedNoRows) => {

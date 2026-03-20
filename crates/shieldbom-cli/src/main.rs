@@ -27,12 +27,12 @@ async fn main() -> Result<()> {
 
 mod commands {
     use crate::cli::{DbArgs, DbCommands, ScanArgs, ValidateArgs};
+    use anyhow::Result;
     use shieldbom_core::license;
     use shieldbom_core::parser;
     use shieldbom_core::report;
     use shieldbom_core::report::OutputFormat;
     use shieldbom_core::vuln;
-    use anyhow::Result;
 
     pub async fn scan(args: ScanArgs) -> Result<()> {
         let sbom = match parser::parse_sbom(&args.file) {
