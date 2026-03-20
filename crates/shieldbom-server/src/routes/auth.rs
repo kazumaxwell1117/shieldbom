@@ -47,9 +47,7 @@ pub async fn register(
         .map_err(|e| ApiError::Internal(e.to_string()))?;
 
     if exists {
-        return Err(ApiError::BadRequest(
-            "email already registered".to_string(),
-        ));
+        return Err(ApiError::BadRequest("email already registered".to_string()));
     }
 
     conn.execute(
