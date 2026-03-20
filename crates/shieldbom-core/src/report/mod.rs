@@ -1,11 +1,11 @@
 use anyhow::Result;
-use clap::ValueEnum;
 use colored::Colorize;
 use serde::Serialize;
 
 use crate::models::{AnalysisReport, Severity};
 
-#[derive(Clone, ValueEnum, Default)]
+#[derive(Clone, Default)]
+#[cfg_attr(feature = "cli", derive(clap::ValueEnum))]
 pub enum OutputFormat {
     /// Human-readable terminal table
     #[default]

@@ -1,11 +1,4 @@
 mod cli;
-mod db;
-mod errors;
-mod license;
-mod models;
-mod parser;
-mod report;
-mod vuln;
 
 use anyhow::Result;
 use clap::Parser;
@@ -34,11 +27,11 @@ async fn main() -> Result<()> {
 
 mod commands {
     use crate::cli::{DbArgs, DbCommands, ScanArgs, ValidateArgs};
-    use crate::license;
-    use crate::parser;
-    use crate::report;
-    use crate::report::OutputFormat;
-    use crate::vuln;
+    use shieldbom_core::license;
+    use shieldbom_core::parser;
+    use shieldbom_core::report;
+    use shieldbom_core::report::OutputFormat;
+    use shieldbom_core::vuln;
     use anyhow::Result;
 
     pub async fn scan(args: ScanArgs) -> Result<()> {
@@ -73,7 +66,7 @@ mod commands {
         let license_issues = license::check(&sbom.components);
         eprintln!("Found {} license issues", license_issues.len());
 
-        let analysis = crate::models::AnalysisReport::new(
+        let analysis = shieldbom_core::models::AnalysisReport::new(
             args.file.clone(),
             sbom.format_detected,
             sbom.components,
@@ -114,12 +107,12 @@ mod commands {
         match args.command {
             DbCommands::Update => {
                 eprintln!("Updating vulnerability database...");
-                crate::db::update().await?;
+                shieldbom_core::db::update().await?;
                 eprintln!("Database updated successfully.");
                 Ok(())
             }
             DbCommands::Info => {
-                let info = crate::db::info()?;
+                let info = shieldbom_core::db::info()?;
                 println!("{info}");
                 Ok(())
             }
